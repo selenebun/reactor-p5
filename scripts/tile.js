@@ -16,6 +16,13 @@ class Tile {
         rect(this.pos.x*CELLSIZE, this.pos.y*CELLSIZE, CELLSIZE-1, CELLSIZE-1);
     }
 
+    // Find center of tile
+    center() {
+        var x = this.pos.x*CELLSIZE + CELLSIZE/2;
+        var y = this.pos.y*CELLSIZE + CELLSIZE/2;
+        return {x: x, y: y};
+    }
+
     // Behavior for collision with neutron
     // Override
     onReact(n) {}

@@ -10,7 +10,7 @@ class Absorber extends Tile {
 
     // Delete the neutron a certain percentage of the time
     onReact(n) {
-        if (random(100) < ABSORB_CHANCE) {
+        if (random(100) < ABSORBER_CHANCE) {
             removeNeutron(n);
             return true;
         }
