@@ -41,10 +41,28 @@ main {
     flex: 1;
 }
 
-#help {
-    background-color: #d2d7d3;
+#side-panel {
     float: left;
     font-family: 'Open Sans', sans-serif;
+}
+
+#monitor {
+    background-color: #96281b;
+    color: #D2D7D3;
+    height: 100px;
+    margin: 20px;
+    padding: 20px;
+    width: 300px;
+}
+
+#monitor ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+#help {
+    background-color: #d2d7d3;
     margin: 20px;
     padding: 20px;
     text-align: justify;

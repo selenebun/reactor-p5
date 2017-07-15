@@ -27,14 +27,6 @@ class Neutron {
                 (this.pos.y > (rows * CELLSIZE)));
     }
 
-    // Find the current tile that the neutron occupies
-    currentTile() {
-        return {
-            x: floor(this.pos.x / CELLSIZE),
-            y: floor(this.pos.y / CELLSIZE)
-        };
-    }
-
     // Update position of neutron
     update() {
         this.pos.add(this.vel);

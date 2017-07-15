@@ -28,6 +28,8 @@ var rows;
 var grid;
 var neutrons;
 
+var selected;
+
 
 //////////////////////////////
 //  Resetting simulation    //
@@ -54,21 +56,30 @@ function initNeutrons() {
     neutrons = [];
 }
 
+// Fill board with empty tiles
 function placeTiles() {
     for (var x = 0; x < cols; x++) {
         for (var y = 0; y < rows; y++) {
-            grid[x][y] = new Moderator(x, y);
-            if (random(100) < 20) {
-                grid[x][y] = new Fuel(x, y, 50);
-            }
+            grid[x][y] = new Tile(x, y);
         }
     }
+}
 
+// Creates a jumble of random cells
+function randomReactor() {
     for (var x = 0; x < cols; x++) {
-        grid[x][0] = new Reflector(x, 0);
-        grid[x][8] = new Absorber(x, 8);
-        grid[x][9] = new Absorber(x, 9);
-        grid[x][10] = new Absorber(x, 10);
+        for (var y = 0; y < rows; y++) {
+            var r = round(random(3));
+            if (r === 0) {
+                grid[x][y] = new Moderator(x, y);
+            } else if (r === 1) {
+                grid[x][y] = new Absorber(x, y);
+            } else if (r === 2) {
+                grid[x][y] = new Reflector(x, y);
+            } else if (r === 3) {
+                grid[x][y] = new Fuel(x, y);
+            }
+        }
     }
 }
 
@@ -78,12 +89,26 @@ function placeTiles() {
 //////////////////////////////
 
 
+// Find the nearest tile
+function currentTile(x, y) {
+    return {
+        x: floor(x / CELLSIZE),
+        y: floor(y / CELLSIZE)
+    };
+}
+
+// Create a glowing effect
 function glow(x, y, diameter, color) {
     for (var i = 0; i < 10; i++) {
         fill(color.r, color.g, color.b, round(255/10));
         noStroke();
         ellipse(x, y, (diameter/10)*(i+1), (diameter/10)*(i+1));
     }
+}
+
+function updateMonitor() {
+    ncount = document.getElementById("ncount");
+    ncount.innerHTML = "Neutron count: " + neutrons.length;
 }
 
 function plusOrMinus() {
@@ -109,7 +134,7 @@ function setup() {
     initGrid();
     initNeutrons();
 
-    placeTiles();
+    randomReactor();
 }
 
 function draw() {
@@ -129,7 +154,7 @@ function draw() {
             continue;
         }
 
-        var c = neutrons[i].currentTile();
+        var c = currentTile(neutrons[i].pos.x, neutrons[i].pos.y);
         if (grid[c.x][c.y].onReact(neutrons[i])) {
             continue;
         }
@@ -137,18 +162,84 @@ function draw() {
         neutrons[i].display();
     }
 
-    console.log(neutrons.length);
+    updateMonitor();
 }
 
-// Press the spacebar to reset the simulation
+// Press X to clear board
 function keyPressed() {
-    // Spacebar pressed
-    if (keyCode === 32) {
+    // X
+    if (keyCode === 88) {
         initGrid();
         initNeutrons();
 
         placeTiles();
-        placeNeutrons();
+    }
+}
+
+function keyPressed() {
+    if (keyCode === 65) {
+        selected = "a";
+    }
+    if (keyCode === 66) {
+        selected = "b";
+    }
+    switch (keyCode) {
+        case 65:
+            selected = "a";
+            break;
+        case 66:
+            selected = "b";
+            break;
+        case 70:
+            selected = "f";
+            break;
+        case 77:
+            selected = "m";
+            break;
+        case 78:
+            selected = "n";
+            break;
+        case 82:
+            selected = "r";
+            break;
+        case 84:
+            selected = "t";
+            break;
+        case 86:
+            // toggle variable editor
+            break;
+        case 88:
+            initGrid();
+            initNeutrons();
+
+            placeTiles();
+    }
+}
+
+function mouseClicked() {
+    var c = currentTile(mouseX, mouseY);
+
+    switch (selected) {
+        case "a":
+            grid[c.x][c.y] = new Absorber(c.x, c.y);
+            break;
+        case "b":
+            // TODO
+            break;
+        case "f":
+            grid[c.x][c.y] = new Fuel(c.x, c.y);
+            break;
+        case "m":
+            grid[c.x][c.y] = new Moderator(c.x, c.y);
+            break;
+        case "n":
+            neutrons.push(new Neutron(mouseX, mouseY));
+            break;
+        case "r":
+            grid[x][y] = new Reflector(c.x, c.y);
+            break;
+        case "t":
+            grid[x][y] = new Tile(c.x, c.y);
     }
 }
 
@@ -160,6 +251,5 @@ function windowResized() {
     initGrid();
     initNeutrons();
 
-    placeTiles();
-    placeNeutrons();
+    randomReactor();
 }
