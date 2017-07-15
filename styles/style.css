@@ -1,4 +1,69 @@
+/*
 html, body {
+    height: 100%;
+}
+
+body {
     margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+*/
+
+html, body, #container, main {
+    margin: 0;
+    padding: 0;
+}
+
+#container {
+    background-color: #f2f1ef;
+    color: #22313f;
+    display: flex;
+    flex-direction: column;
+    font-family: 'Oswald', sans-serif;
+    min-height: 100vh;
+}
+
+header {
+    background-color: #87d37c;
+    height: 106px;
+    text-align: center;
+}
+
+header h1 {
+    font-size: 50px;
+    margin: 10px;
+    text-shadow: 2px 2px 0px #26a65b;
+}
+
+main {
+    flex: 1;
+}
+
+#help {
+    background-color: #d2d7d3;
+    float: left;
+    font-family: 'Open Sans', sans-serif;
+    margin: 20px;
+    padding: 20px;
+    text-align: justify;
+    width: 300px;
+}
+
+#sketch-container {
+    margin: 20px;
     overflow: hidden;
+    padding: 0;
+}
+
+h2 {
+    color: #F22613;
+    text-align: center;
+    text-shadow: 1px 1px 0px #22313f;
+}
+
+#copyright {
+    padding-right: 20px;
+    text-align: right;
 }
