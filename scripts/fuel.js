@@ -1,33 +1,45 @@
 class Fuel extends Tile {
-    constructor(col, row, enrichment) {
+    constructor(col, row) {
         super(col, row);
-        this.enrichment = enrichment;
+        this.cool = CONFIG.fuelCool;
         this.color = {
             r: 0,
-            g: 155,
+            g: 255,
             b: 0
         };
     }
 
-    // Absorb one neutron and generate a random number of neutrons
+    // Randomly absorb a single neutron and spawn a random number of neutrons
     onReact(n) {
-        if (random(100) < FUEL_ABSORB_CHANCE) {
+        if (random(100) < CONFIG.fuelAbsorbChance) {
             removeNeutron(n);
 
-            for (var i = 0; i < random(NSPAWN_MIN, NSPAWN_MAX); i++) {
-                var c = this.center();
+            // Glow
+            var c = this.center();
+            glow(c.x, c.y, this.color);
+
+            // Spawn neutrons
+            var spawnCount = round(random(CONFIG.nSpawnMin,
+                                          CONFIG.nSpawnMax));
+            for (var i = 0; i < spawnCount; i++) {
                 neutrons.push(new Neutron(c.x, c.y));
             }
+
+            this.heat += CONFIG.fuelHeat;
 
             return true;
         }
     }
 
-    // Spontaneously generate a neutron rarely
+    // Randomly spontaneously generate a neutron
     update() {
-        if (random(100) < N_SPONT_CHANCE) {
+        if (random(100) < CONFIG.fuelSpontChance) {
             var c = this.center();
-            neutrons.push(new Neutron(c.x, c.y))
+            glow(c.x, c.y, this.color);
+            neutrons.push(new Neutron(c.x, c.y));
+            this.heat += CONFIG.fuelSpontHeat;
         }
+        
+        this.spreadHeat();
     }
 }

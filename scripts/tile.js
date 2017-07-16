@@ -1,31 +1,67 @@
 class Tile {
     constructor(col, row) {
         this.pos = new p5.Vector(col, row);
-        this.temp = 0;
+        this.heat = 0;
+        this.cool = 0;
         this.color = {
-            r: 0,
-            g: 0,
-            b: 0
+            r: 255,
+            g: 255,
+            b: 255
         };
     }
 
     // Display tile on the screen
     display() {
-        fill(this.color.r, this.color.g, this.color.b);
-        stroke(0);
-        rect(this.pos.x*CELLSIZE, this.pos.y*CELLSIZE, CELLSIZE-1, CELLSIZE-1);
+        // Show heat overlay
+        if (heatOverlay) {
+            fill(this.heat/CONFIG.heatMax*255, 0, 0);
+            stroke(0);
+            rect(this.pos.x*RENDER.cellSize, this.pos.y*RENDER.cellSize,
+                 RENDER.cellSize-1, RENDER.cellSize-1);
+        } else {
+            fill(this.color.r, this.color.g, this.color.b);
+            stroke(0);
+            rect(this.pos.x*RENDER.cellSize, this.pos.y*RENDER.cellSize,
+                 RENDER.cellSize-1, RENDER.cellSize-1);
+        }
+    }
+
+    // Get array of adjacent tiles
+    adjacent() {
+        ;
     }
 
     // Find center of tile
     center() {
-        var x = this.pos.x*CELLSIZE + CELLSIZE/2;
-        var y = this.pos.y*CELLSIZE + CELLSIZE/2;
+        var x = this.pos.x*RENDER.cellSize + RENDER.cellSize/2;
+        var y = this.pos.y*RENDER.cellSize + RENDER.cellSize/2;
         return {x: x, y: y};
+    }
+
+    // Ensure heat doesn't exceed max or min value
+    checkHeat() {
+        if (this.heat < 0) {
+            this.heat = 0;
+            return true;
+        }
+        if (this.heat > CONFIG.heatMax) {
+            this.heat = CONFIG.heatMax;
+        }
     }
 
     // Behavior for collision with neutron
     // Override
     onReact(n) {}
+
+    // Cooling and distributing heat
+    spreadHeat() {
+        this.heat -= this.cool;
+
+        // Spread heat to adjacent tiles
+        if (!(this.checkHeat())) {
+            ;
+        }
+    }
 
     // Behavior for each cycle of the simulation
     // Override

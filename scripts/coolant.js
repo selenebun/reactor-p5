@@ -1,11 +1,11 @@
-class Moderator extends Tile {
+class Coolant extends Tile {
     constructor(col, row) {
         super(col, row);
-        this.cool = CONFIG.moderatorCool;
+        this.cool = CONFIG.coolantCool;
         this.color = {
-            r: 218,
-            g: 223,
-            b: 225
+            r: 25,
+            g: 181,
+            b: 254
         };
     }
 
