@@ -11,7 +11,7 @@ class Fuel extends Tile {
 
     // Randomly absorb a single neutron and spawn a random number of neutrons
     onReact(n) {
-        if (random(100) < CONFIG.fuelAbsorbChance) {
+        if (random(100) < CONFIG.fuelChance) {
             removeNeutron(n);
 
             // Glow

@@ -6,28 +6,27 @@
 // Configuration
 const CONFIG = {
     absorberChance: 25,     // chance for absorber to absorb a neutron
-    absorberCool: 2,        // absorber cooling per tick
-    absorberHeat: 2,        // heat generated per collision
+    absorberCool: 1,        // absorber cooling per tick
+    absorberHeat: 200,      // heat generated per collision
     controlRodChance: 50,   // chance for control rod to absorb a neutron
-    controlRodCool: 2,      // control rod cooling per tick
-    controlRodHeat: 4,      // heat generated per collision
-    coolantCool: 80,        // coolant cell cooling per tick
-    fuelAbsorbChance: 5,    // chance for fuel cell to absorb a neutron
+    controlRodCool: 1,      // control rod cooling per tick
+    controlRodHeat: 200,    // heat generated per collision
+    coolantCool: 400,       // coolant cell cooling per tick
+    fuelChance: 5,          // chance for fuel cell to absorb a neutron
     fuelCool: 1,            // fuel cell cooling per tick
-    fuelHeat: 20,           // heat generated per reaction
-    fuelReactChance: 100,   // chance for fuel cell to react
+    fuelHeat: 400,          // heat generated per reaction
     fuelSpontChance: 5,     // chance for spontaneous neutron emission
     fuelSpontHeat: 2,       // heat generated per spontaneous neutron emission
-    heatMax: 100,          // maximum allowed heat
-    heatTransfer: 0.02,     // percent of heat transferred to adjacent tiles
-    moderatorCool: 10,      // moderator cooling per tick
+    heatMax: 10000,         // maximum allowed heat
+    heatTransfer: 0.05,     // percent of heat transferred to adjacent tiles
+    moderatorCool: 2,       // moderator cooling per tick
     nCardDir: false,        // neutrons only travel in cardinal directions
     nSpawnMin: 1,           // min number of neutrons per reaction
     nSpawnMax: 3,           // max number of neutrons per reaction
     nSpeedMin: 1,           // min neutron speed
     nSpeedMax: 10,          // max neutron speed
     reflectorCool: 1,       // reflector cooling per tick
-    reflectorHeat: 1,       // heat generated per reflection
+    reflectorHeat: 100,       // heat generated per reflection
     renderGlow: true,       // render glow effect
     wallCool: 1000000       // wall cooling per tick
 };
@@ -88,23 +87,65 @@ function fillModerator() {
             grid[x][y] = new Moderator(x, y);
         }
     }
+
+    fillEdges();
 }
 
-// Creates a jumble of random cells
-function randomReactor() {
+// Fill edges with walls
+function fillEdges() {
     for (var x = 0; x < cols; x++) {
-        for (var y = 0; y < rows; y++) {
-            var r = round(random(3));
-            if (r === 0) {
-                grid[x][y] = new Moderator(x, y);
-            } else if (r === 1) {
-                grid[x][y] = new Absorber(x, y);
-            } else if (r === 2) {
-                grid[x][y] = new Reflector(x, y);
-            } else if (r === 3) {
-                grid[x][y] = new Fuel(x, y);
-            }
+        grid[x][0] = new Wall(x, 0);
+        grid[x][rows-1] = new Wall(x, rows-1);
+    }
+
+    for (var y = 1; y < rows-1; y++) {
+        grid[0][y] = new Wall(0, y);
+        grid[cols-1][y] = new Wall(cols-1, y);
+    }
+}
+
+// Create example reactor
+function defaultReactor() {
+    fillModerator();
+    
+    for (var x = 0; x < 14; x++) {
+        grid[x][0] = new Wall(x, 0);
+        grid[x][13] = new Wall(x, 13);
+    }
+
+    for (var y = 1; y < 13; y++) {
+        grid[0][y] = new Wall(0, y);
+        grid[13][y] = new Wall(13, y);
+    }
+
+    for (var x = 1; x < 13; x++) {
+        grid[x][1] = new Reflector(x, 1);
+        grid[x][12] = new Reflector(x, 12);
+    }
+
+    for (var y = 2; y < 12; y++) {
+        grid[1][y] = new Reflector(1, y);
+        grid[12][y] = new Reflector(12, y);
+    }
+
+    for (var x = 3; x < 11; x++) {
+        for (var y = 3; y < 11; y++) {
+            grid[x][y] = new Fuel(x, y);
         }
+    }
+
+    for (var x = 2; x < 12; x++) {
+        grid[x][2] = new ControlRod(x, 2);
+        grid[x][5] = new ControlRod(x, 5);
+        grid[x][8] = new ControlRod(x, 8);
+        grid[x][11] = new ControlRod(x, 11);
+    }
+
+    for (var y = 3; y < 11; y++) {
+        grid[2][y] = new ControlRod(2, y);
+        grid[5][y] = new ControlRod(5, y);
+        grid[8][y] = new ControlRod(8, y);
+        grid[11][y] = new ControlRod(11, y);
     }
 }
 
@@ -113,6 +154,27 @@ function randomReactor() {
 //  Misc. custom functions  //
 //////////////////////////////
 
+
+// Ensure that the min value is less than or equal to the max value
+function checkMinMax(min, max) {
+    if (min > max) {
+        return max;
+    } else {
+        return min;
+    }
+}
+
+// Ensure value falls within the correct bounds
+function constrain(value, min=0, max=1000000) {
+    value = int(value);
+    if (value < min) {
+        return min;
+    } else if (value > max) {
+        return max;
+    } else {
+        return value;
+    }
+}
 
 // Find the nearest tile
 function currentTile(x, y) {
@@ -134,6 +196,7 @@ function glow(x, y, color) {
     }
 }
 
+// Returns 1 or -1
 function plusOrMinus() {
     return round(random()) * 2 - 1;
 }
@@ -143,6 +206,7 @@ function randVelocity() {
     return random(CONFIG.nSpeedMin, CONFIG.nSpeedMax) * plusOrMinus();
 }
 
+// Deletes a neutron
 function removeNeutron(n) {
     var index = neutrons.indexOf(n);
 
@@ -151,10 +215,57 @@ function removeNeutron(n) {
     }
 }
 
+function sleep(sleepDuration) {
+    var now = new Date().getTime();
+    while(new Date().getTime() < now + sleepDuration){ /* do nothing */ } 
+}
+
+// Updates the monitor with information
 function updateMonitor() {
     ncount = document.getElementById("ncount");
     ncount.innerHTML = "Neutron count: " + neutrons.length;
 }
+
+// Updates configuration from user input
+function vars() {
+    var form = document.getElementById("vars");
+
+    CONFIG.absorberChance = constrain(form.absorberChance.value, 0, 100);
+    CONFIG.absorberCool = constrain(form.absorberCool.value, 0, 1000000);
+    CONFIG.absorberHeat = constrain(form.absorberHeat.value, 0, 1000000);
+    CONFIG.controlRodChance = constrain(form.controlRodChance, 0, 100);
+    CONFIG.controlRodCool = constrain(form.controlRodCool, 0, 1000000);
+}
+
+/*
+// Configuration
+const CONFIG = {
+    absorberChance: 25,     // chance for absorber to absorb a neutron
+    absorberCool: 2,        // absorber cooling per tick
+    absorberHeat: 2,        // heat generated per collision
+    controlRodChance: 50,   // chance for control rod to absorb a neutron
+    controlRodCool: 2,      // control rod cooling per tick
+    controlRodHeat: 4,      // heat generated per collision
+    coolantCool: 80,        // coolant cell cooling per tick
+    fuelChance: 5,          // chance for fuel cell to absorb a neutron
+    fuelCool: 1,            // fuel cell cooling per tick
+    fuelHeat: 20,           // heat generated per reaction
+    fuelSpontChance: 5,     // chance for spontaneous neutron emission
+    fuelSpontHeat: 2,       // heat generated per spontaneous neutron emission
+    heatMax: 1000,          // maximum allowed heat
+    heatTransfer: 0.02,     // percent of heat transferred to adjacent tiles
+    moderatorCool: 10,      // moderator cooling per tick
+    nCardDir: false,        // neutrons only travel in cardinal directions
+    nSpawnMin: 1,           // min number of neutrons per reaction
+    nSpawnMax: 3,           // max number of neutrons per reaction
+    nSpeedMin: 1,           // min neutron speed
+    nSpeedMax: 10,          // max neutron speed
+    reflectorCool: 1,       // reflector cooling per tick
+    reflectorHeat: 1,       // heat generated per reflection
+    renderGlow: true,       // render glow effect
+    wallCool: 1000000       // wall cooling per tick
+};
+*/
 
 
 //////////////////////////////////
@@ -167,11 +278,11 @@ function setup() {
     initGrid();
     initNeutrons();
 
-    randomReactor();
+    defaultReactor();
 }
 
 function draw() {
-    background(242, 241, 239);
+    background(210, 215, 211);
 
     for (var x = 0; x < cols; x++) {
         for (var y = 0; y < rows; y++) {
@@ -239,9 +350,6 @@ function keyPressed() {
         case 87:
             selected = "w";
             break;
-        case 86:
-            // toggle variable editor
-            break;
         case 88:
             initGrid();
             initNeutrons();
@@ -288,6 +396,8 @@ function mouseDragged() {
             grid[c.x][c.y] = new Wall(c.x, c.y);
             break;
     }
+    
+    fillEdges();
 }
 
 // Fit grid to screen
@@ -298,5 +408,5 @@ function windowResized() {
     initGrid();
     initNeutrons();
 
-    randomReactor();
+    defaultReactor();
 }

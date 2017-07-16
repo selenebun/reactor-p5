@@ -50,7 +50,105 @@
           </div>
         </div>
 
-        <div id="sketch-container"></div>
+        <div id="sketch-panel">
+          <div id="sketch-container"></div>
+          <div id="config">
+            <hr>
+            <h2>Configuration</h2>
+            <form id="vars">
+              <div class="form-col">
+                <h3>General</h3>
+                <input id="nCardDir" name="nCardDir" type="checkbox">
+                <label for="nCardDir">
+                  Neutrons only travel in cardinal directions
+                </label><br>
+                <input id="renderGlow" name="renderGlow" type="checkbox">
+                <label for="renderGlow">Show glow effect</label>
+
+                <h3>Heat Settings</h3>
+                <label for="heatMax">Max heat</label>
+                <input id="heatMax" name="heatMax" type="number" min="0"
+                       max="10000"><br>
+                <label for="heatTransfer">Heat transfer (percent)</label>
+                <input id="heatTransfer" name="heatTransfer" type="number"
+                       min="0" max="1" step="0.01"><br>
+                
+                <h3>Neutrons</h3>
+                <label for="nSpeedMin">Min neutron speed</label>
+                <input id="nSpeedMin" name="nSpeedMin" type="number" min="0"
+                       max="10"><br>
+                <label for="nSpeedMax">Max neutron speed</label>
+                <input id="nSpeedMax" name="nSpeedMax" type="number" min="0"
+                       max="10">
+              </div>
+              <div class="form-col">
+                <h3>Cooling</h3>
+                <label for="absorberCool">Absorber cooling</label>
+                <input id="absorberCool" name="absorberCool" type="number"
+                       min="0"><br>
+                <label for="controlRodCool">Control rod cooling</label>
+                <input id="controlRodCool" name="controlRodCool" type="number"
+                       min="0"><br>
+                <label for="coolantCool">Coolant cell cooling</label>
+                <input id="coolantCool" name="coolantCool" type="number"
+                       min="0"><br>
+                <label for="fuelCool">Fuel rod cooling</label>
+                <input id="fuelCool" name="fuelCool" type="number"
+                       min="0"><br>
+                <label for="moderatorCool">Moderator cooling</label>
+                <input id="moderatorCool" name="moderatorCool" type="number"
+                       min="0"><br>
+                <label for="reflectorCool">Reflector cooling</label>
+                <input id="reflectorCool" name="reflectorCool" type="number"
+                       min="0"><br>
+                
+                <h3>Neutron Capture</h3>
+                <label for="absorberChance">Absorber capture chance</label>
+                <input id="absorberChance" name="absorberChance" type="number"
+                       min="0" max="100">
+                <label for="controlRodChance">
+                  Control rod capture chance
+                </label>
+                <input id="controlRodChance" name="controlRodChance"
+                       type="number" min="0" max="100">
+                <label for="fuelChance">Fuel rod capture chance</label>
+                <input id="fuelChance" name="fuelChance" type="number"
+                       min="0" max="100">
+              </div>
+              <div class="form-col">
+                <h3>Fuel Rods</h3>
+                <label for="fuelHeat">Heat per fission event</label>
+                <input id="fuelHeat" name="fuelHeat" type="number"
+                       min="0"><br>
+                <label for="nSpawnMin">Min neutrons per fission event</label>
+                <input id="nSpawnMin" name="nSpawnMin" type="number" min="1"
+                       max="3"><br>
+                <label for="nSpawnMax">Max neutrons per fission event</label>
+                <input id="nSpawnMax" name="nSpawnMax" type="number" min="1"
+                       max="3"><br>
+                <label for="fuelSpontChance">Radioactive decay chance</label>
+                <input id="fuelSpontChance" name="fuelSpontChance"
+                       type="number" min="0" max="100"><br>
+                <label for="fuelSpontHeat">Radioactive decay heat</label>
+                <input id="fuelSpontHeat" name="fuelSpontHeat" type="number"
+                       min="0" max="100">
+                
+                <h3>Neutron Collisions</h3>
+                <label for="absorberHeat">Heat from absorber</label>
+                <input id="absorberHeat" name="absorberHeat" type="number"
+                       min="0"><br>
+                <label for="controlRodHeat">Heat from control rod</label>
+                <input id="controlRodHeat" name="controlRodHeat"
+                       type="number" min="0"><br>
+                <label for="reflectorHeat">Heat from reflector</label>
+                <input id="reflectorHeat" name="reflectorHeat"
+                       type="number" min="0">
+              </div>
+              <hr>
+              <input type="button" value="Update variables" onclick="vars();">
+            </form>
+          </div>
+        </div>
       </main>
 
       <footer>
@@ -59,3 +157,11 @@
     </div>
   </body>
 </html>
+
+<!--
+  const CONFIG = {
+    absorberHeat: 2,        // heat generated per collision
+    controlRodHeat: 4,      // heat generated per collision
+    reflectorHeat: 1,       // heat generated per reflection
+};
+  -->

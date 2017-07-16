@@ -39,11 +39,11 @@ header h1 {
 
 main {
     flex: 1;
+    font-family: 'Open Sans', sans-serif;
 }
 
 #side-panel {
     float: left;
-    font-family: 'Open Sans', sans-serif;
 }
 
 #monitor {
@@ -69,16 +69,49 @@ main {
     width: 300px;
 }
 
-#sketch-container {
+#sketch-panel {
+    background-color: #d2d7d3;
     margin: 20px;
     overflow: hidden;
+}
+
+#sketch-container {
+    margin: 20px 20px 0;
+    overflow: hidden;
     padding: 0;
+}
+
+#config {
+    float: left;
+    padding: 20px;
+}
+
+.form-col {
+    float: left;
+    margin-bottom: 20px;
+    width: 33%;
+}
+
+form input[type="number"] {
+    max-width: 60px;
+}
+
+form input[type="button"] {
+    text-align: center;
+}
+
+hr {
+    clear: both;
 }
 
 h2 {
     color: #F22613;
     text-align: center;
     text-shadow: 1px 1px 0px #22313f;
+}
+
+h3 {
+    text-align: center;
 }
 
 #copyright {

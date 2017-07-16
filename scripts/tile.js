@@ -28,7 +28,22 @@ class Tile {
 
     // Get array of adjacent tiles
     adjacent() {
-        ;
+        var arr = [];
+
+        if (!(this.pos.x === 0)) {
+            arr.push(grid[this.pos.x-1][this.pos.y]);
+        }
+        if (!(this.pos.y === 0)) {
+            arr.push(grid[this.pos.x][this.pos.y-1]);
+        }
+        if (!(this.pos.x === (cols-1))) {
+            arr.push(grid[this.pos.x+1][this.pos.y]);
+        }
+        if (!(this.pos.y === (rows-1))) {
+            arr.push(grid[this.pos.x+1][this.pos.y]);
+        }
+
+        return shuffle(arr);
     }
 
     // Find center of tile
@@ -59,7 +74,20 @@ class Tile {
 
         // Spread heat to adjacent tiles
         if (!(this.checkHeat())) {
-            ;
+            var adj = this.adjacent();
+
+            for (var i = 0; i < adj.length; i++) {
+                var heat = this.heat * CONFIG.heatTransfer;
+
+                if (heat < 1) {
+                    this.heat = 0;
+                    adj[i].heat += this.heat;
+                    break;
+                }
+
+                this.heat -= heat;
+                adj[i].heat += heat;
+            }
         }
     }
 

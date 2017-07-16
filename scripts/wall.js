@@ -21,6 +21,6 @@ class Wall extends Tile {
     }
 
     update() {
-        this.spreadHeat();
+        this.heat = 0;
     }
 }
