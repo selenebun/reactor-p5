@@ -4,7 +4,7 @@ class Fuel extends Tile {
         this.enrichment = enrichment;
         this.color = {
             r: 0,
-            g: 255,
+            g: 155,
             b: 0
         };
     }

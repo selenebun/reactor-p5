@@ -16,7 +16,7 @@ class Neutron {
     // Display neutron on the screen
     display() {
         fill(this.color.r, this.color.g, this.color.b);
-        stroke(0);
+        stroke(255);
         ellipse(this.pos.x, this.pos.y, this.diameter, this.diameter);
     }
 

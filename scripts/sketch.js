@@ -165,24 +165,7 @@ function draw() {
     updateMonitor();
 }
 
-// Press X to clear board
 function keyPressed() {
-    // X
-    if (keyCode === 88) {
-        initGrid();
-        initNeutrons();
-
-        placeTiles();
-    }
-}
-
-function keyPressed() {
-    if (keyCode === 65) {
-        selected = "a";
-    }
-    if (keyCode === 66) {
-        selected = "b";
-    }
     switch (keyCode) {
         case 65:
             selected = "a";
@@ -216,7 +199,7 @@ function keyPressed() {
     }
 }
 
-function mouseClicked() {
+function mouseDragged() {
     var c = currentTile(mouseX, mouseY);
 
     switch (selected) {
@@ -236,10 +219,10 @@ function mouseClicked() {
             neutrons.push(new Neutron(mouseX, mouseY));
             break;
         case "r":
-            grid[x][y] = new Reflector(c.x, c.y);
+            grid[c.x][c.y] = new Reflector(c.x, c.y);
             break;
         case "t":
-            grid[x][y] = new Tile(c.x, c.y);
+            grid[c.x][c.y] = new Tile(c.x, c.y);
     }
 }
 
