@@ -12,8 +12,8 @@ const CONFIG = {
     controlRodCool: 1,      // control rod cooling per tick
     controlRodHeat: 200,    // heat generated per collision
     coolantCool: 400,       // coolant cell cooling per tick
-    fuelChance: 5,          // chance for fuel cell to absorb a neutron
-    fuelCool: 1,            // fuel cell cooling per tick
+    fuelChance: 7,         // chance for fuel rod to absorb a neutron
+    fuelCool: 1,            // fuel rod cooling per tick
     fuelHeat: 400,          // heat generated per reaction
     fuelSpontChance: 5,     // chance for spontaneous neutron emission
     fuelSpontHeat: 2,       // heat generated per spontaneous neutron emission
@@ -51,7 +51,7 @@ var neutrons;
 
 var selected;
 
-var controlRods = false;
+var controlRods = true;
 var heatOverlay = false;
 
 
@@ -107,25 +107,20 @@ function fillEdges() {
 // Create example reactor
 function defaultReactor() {
     fillModerator();
-    
-    for (var x = 0; x < 14; x++) {
-        grid[x][0] = new Wall(x, 0);
-        grid[x][13] = new Wall(x, 13);
-    }
 
-    for (var y = 1; y < 13; y++) {
-        grid[0][y] = new Wall(0, y);
-        grid[13][y] = new Wall(13, y);
-    }
+    grid[1][1] = new Wall(1, 1);
+    grid[1][12] = new Wall(1, 12);
+    grid[12][1] = new Wall(12, 1);
+    grid[12][12] = new Wall(12, 12);
 
-    for (var x = 1; x < 13; x++) {
-        grid[x][1] = new Reflector(x, 1);
-        grid[x][12] = new Reflector(x, 12);
+    for (var x = 2; x < 12; x++) {
+        grid[x][1] = new VerticalReflector(x, 1);
+        grid[x][12] = new VerticalReflector(x, 12);
     }
 
     for (var y = 2; y < 12; y++) {
-        grid[1][y] = new Reflector(1, y);
-        grid[12][y] = new Reflector(12, y);
+        grid[1][y] = new HorizontalReflector(1, y);
+        grid[12][y] = new HorizontalReflector(12, y);
     }
 
     for (var x = 3; x < 11; x++) {
@@ -213,11 +208,6 @@ function removeNeutron(n) {
     if (index > -1) {
         neutrons.splice(index, 1);
     }
-}
-
-function sleep(sleepDuration) {
-    var now = new Date().getTime();
-    while(new Date().getTime() < now + sleepDuration){ /* do nothing */ } 
 }
 
 // Updates the monitor with information
@@ -344,9 +334,6 @@ function keyPressed() {
         case 81:
             controlRods = !controlRods;
             break;
-        case 82:
-            selected = "r";
-            break;
         case 87:
             selected = "w";
             break;
@@ -360,6 +347,12 @@ function keyPressed() {
         case 90:
             // Clear all neutrons
             initNeutrons();
+            break;
+        case 188:
+            selected = ",";
+            break;
+        case 190:
+            selected = ".";
             break;
     }
 }
@@ -389,11 +382,14 @@ function mouseDragged() {
         case "n":
             neutrons.push(new Neutron(mouseX, mouseY));
             break;
-        case "r":
-            grid[c.x][c.y] = new Reflector(c.x, c.y);
-            break;
         case "w":
             grid[c.x][c.y] = new Wall(c.x, c.y);
+            break;
+        case ",":
+            grid[c.x][c.y] = new VerticalReflector(c.x, c.y);
+            break;
+        case ".":
+            grid[c.x][c.y] = new HorizontalReflector(c.x, c.y);
             break;
     }
     

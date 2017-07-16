@@ -69,6 +69,16 @@ main {
     width: 300px;
 }
 
+#help ul {
+    list-style: none;
+}
+
+.control {
+    color: #d35400;
+    font-weight: bold;
+    text-shadow: 1px 1px 0px white;
+}
+
 #sketch-panel {
     background-color: #d2d7d3;
     margin: 20px;

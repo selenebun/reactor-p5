@@ -1,21 +1,17 @@
-class Reflector extends Tile {
+class HorizontalReflector extends Tile {
     constructor(col, row) {
         super(col, row);
         this.cool = CONFIG.reflectorCool;
         this.color = {
-            r: 34,
-            g: 49,
-            b: 63
+            r: 242,
+            g: 121,
+            b: 53
         };
     }
 
     // Reflect the neutron
     onReact(n) {
-        if (n.vel.x) {
-            n.vel.x *= -1;
-        } else {
-            n.vel.y *= -1;
-        }
+        n.vel.x *= -1;
         
         this.heat += CONFIG.reflectorHeat;
     }
