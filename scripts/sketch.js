@@ -179,6 +179,46 @@ function currentTile(x, y) {
     };
 }
 
+// User drawing
+function drawMap() {
+    var c = currentTile(mouseX, mouseY);
+
+    switch (selected) {
+        case "a":
+            grid[c.x][c.y] = new Absorber(c.x, c.y);
+            break;
+        case "b":
+            // TODO
+            break;
+        case "c":
+            grid[c.x][c.y] = new Coolant(c.x, c.y);
+            break;
+        case "f":
+            grid[c.x][c.y] = new Fuel(c.x, c.y);
+            break;
+        case "g":
+            grid[c.x][c.y] = new ControlRod(c.x, c.y);
+            break;
+        case "m":
+            grid[c.x][c.y] = new Moderator(c.x, c.y);
+            break;
+        case "n":
+            neutrons.push(new Neutron(mouseX, mouseY));
+            break;
+        case "w":
+            grid[c.x][c.y] = new Wall(c.x, c.y);
+            break;
+        case ",":
+            grid[c.x][c.y] = new VerticalReflector(c.x, c.y);
+            break;
+        case ".":
+            grid[c.x][c.y] = new HorizontalReflector(c.x, c.y);
+            break;
+    }
+    
+    fillEdges();
+}
+
 // Create a glowing effect
 function glow(x, y, color) {
     if ((CONFIG.renderGlow) && !(heatOverlay)) {
@@ -358,42 +398,11 @@ function keyPressed() {
 }
 
 function mouseDragged() {
-    var c = currentTile(mouseX, mouseY);
+    drawMap();
+}
 
-    switch (selected) {
-        case "a":
-            grid[c.x][c.y] = new Absorber(c.x, c.y);
-            break;
-        case "b":
-            // TODO
-            break;
-        case "c":
-            grid[c.x][c.y] = new Coolant(c.x, c.y);
-            break;
-        case "f":
-            grid[c.x][c.y] = new Fuel(c.x, c.y);
-            break;
-        case "g":
-            grid[c.x][c.y] = new ControlRod(c.x, c.y);
-            break;
-        case "m":
-            grid[c.x][c.y] = new Moderator(c.x, c.y);
-            break;
-        case "n":
-            neutrons.push(new Neutron(mouseX, mouseY));
-            break;
-        case "w":
-            grid[c.x][c.y] = new Wall(c.x, c.y);
-            break;
-        case ",":
-            grid[c.x][c.y] = new VerticalReflector(c.x, c.y);
-            break;
-        case ".":
-            grid[c.x][c.y] = new HorizontalReflector(c.x, c.y);
-            break;
-    }
-    
-    fillEdges();
+function mousePressed() {
+    drawMap();
 }
 
 // Fit grid to screen
