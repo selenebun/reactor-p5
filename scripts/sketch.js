@@ -59,7 +59,6 @@ var heatOverlay = false;
 //  Resetting simulation    //
 //////////////////////////////
 
-
 function initCanvas() {
     var w = document.getElementById("sketch-container").offsetWidth;
     canvas = createCanvas(w, RENDER.canvasHeight);

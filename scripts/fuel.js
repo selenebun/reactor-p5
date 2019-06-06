@@ -39,7 +39,7 @@ class Fuel extends Tile {
             neutrons.push(new Neutron(c.x, c.y));
             this.heat += CONFIG.fuelSpontHeat;
         }
-        
+
         this.spreadHeat();
     }
 }
