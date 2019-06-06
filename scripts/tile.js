@@ -43,6 +43,21 @@ class Tile {
             arr.push(grid[this.pos.x][this.pos.y+1]);
         }
 
+        if(!CONFIG.nCardDir && true) {
+            if ((this.pos.x > 0) && (this.pos.y > 0)) {
+                arr.push(grid[this.pos.x-1][this.pos.y-1]);
+            }
+            if ((this.pos.x > 0) && (this.pos.y < (rows-1))) {
+                arr.push(grid[this.pos.x-1][this.pos.y+1]);
+            }
+            if ((this.pos.x < (cols-1)) && (this.pos.y > 0)) {
+                arr.push(grid[this.pos.x+1][this.pos.y-1]);
+            }
+            if ((this.pos.x < (cols-1)) && (this.pos.y < (rows-1))) {
+                arr.push(grid[this.pos.x+1][this.pos.y+1]);
+            }
+        }
+
         return shuffle(arr);
     }
 
