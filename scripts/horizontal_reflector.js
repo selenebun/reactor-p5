@@ -12,7 +12,7 @@ class HorizontalReflector extends Tile {
     // Reflect the neutron
     onReact(n) {
         n.vel.x *= -1;
-        
+
         this.heat += CONFIG.reflectorHeat;
     }
 
