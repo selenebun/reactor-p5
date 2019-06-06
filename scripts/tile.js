@@ -40,7 +40,7 @@ class Tile {
             arr.push(grid[this.pos.x+1][this.pos.y]);
         }
         if (!(this.pos.y === (rows-1))) {
-            arr.push(grid[this.pos.x+1][this.pos.y]);
+            arr.push(grid[this.pos.x][this.pos.y+1]);
         }
 
         return shuffle(arr);
@@ -76,8 +76,9 @@ class Tile {
         if (!(this.checkHeat())) {
             var adj = this.adjacent();
 
+            var heat = this.heat * CONFIG.heatTransfer / 100;
+
             for (var i = 0; i < adj.length; i++) {
-                var heat = this.heat * CONFIG.heatTransfer;
 
                 if (heat < 1) {
                     this.heat = 0;
