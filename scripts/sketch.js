@@ -12,13 +12,13 @@ const CONFIG = {
     controlRodCool: 1,      // control rod cooling per tick
     controlRodHeat: 200,    // heat generated per collision
     coolantCool: 400,       // coolant cell cooling per tick
-    fuelChance: 7,         // chance for fuel rod to absorb a neutron
+    fuelChance: 7,          // chance for fuel rod to absorb a neutron
     fuelCool: 1,            // fuel rod cooling per tick
     fuelHeat: 400,          // heat generated per reaction
     fuelSpontChance: 5,     // chance for spontaneous neutron emission
     fuelSpontHeat: 2,       // heat generated per spontaneous neutron emission
     heatMax: 10000,         // maximum allowed heat
-    heatTransfer: 0.05,     // percent of heat transferred to adjacent tiles
+    heatTransfer: 5,        // percent of heat transferred to adjacent tiles
     moderatorCool: 2,       // moderator cooling per tick
     nCardDir: false,        // neutrons only travel in cardinal directions
     nSpawnMin: 1,           // min number of neutrons per reaction
@@ -26,7 +26,7 @@ const CONFIG = {
     nSpeedMin: 1,           // min neutron speed
     nSpeedMax: 10,          // max neutron speed
     reflectorCool: 1,       // reflector cooling per tick
-    reflectorHeat: 100,       // heat generated per reflection
+    reflectorHeat: 100,     // heat generated per reflection
     renderGlow: true,       // render glow effect
     wallCool: 1000000       // wall cooling per tick
 };
@@ -263,8 +263,61 @@ function vars() {
     CONFIG.absorberChance = constrain(form.absorberChance.value, 0, 100);
     CONFIG.absorberCool = constrain(form.absorberCool.value, 0, 1000000);
     CONFIG.absorberHeat = constrain(form.absorberHeat.value, 0, 1000000);
-    CONFIG.controlRodChance = constrain(form.controlRodChance, 0, 100);
-    CONFIG.controlRodCool = constrain(form.controlRodCool, 0, 1000000);
+    CONFIG.controlRodChance = constrain(form.controlRodChance.value, 0, 100);
+    CONFIG.controlRodCool = constrain(form.controlRodCool.value, 0, 1000000);
+
+    CONFIG.controlRodHeat = int(form.controlRodHeat.value)
+    CONFIG.coolantCool = int(form.coolantCool.value)
+    CONFIG.fuelChance = int(form.fuelChance.value)
+    CONFIG.fuelCool = int(form.fuelCool.value)
+    CONFIG.fuelHeat = int(form.fuelHeat.value)
+    CONFIG.fuelSpontChance = int(form.fuelSpontChance.value)
+    CONFIG.fuelSpontHeat = int(form.fuelSpontHeat.value)
+    CONFIG.heatMax = int(form.heatMax.value)
+    CONFIG.heatTransfer = int(form.heatTransfer.value)
+    CONFIG.moderatorCool = int(form.moderatorCool.value)
+    CONFIG.nSpawnMin = int(form.nSpawnMin.value)
+    CONFIG.nSpawnMax = int(form.nSpawnMax.value)
+    CONFIG.nSpeedMin = int(form.nSpeedMin.value)
+    CONFIG.nSpeedMax = int(form.nSpeedMax.value)
+    CONFIG.reflectorCool = int(form.reflectorCool.value)
+    CONFIG.reflectorHeat = int(form.reflectorHeat.value)
+
+    // CONFIG.wallCool = form.wallCool.value
+
+    CONFIG.renderGlow = form.renderGlow.checked
+    CONFIG.nCardDir = form.nCardDir.checked
+}
+
+function initVars() {
+    var form = document.getElementById("vars");
+
+    form.absorberChance.value = CONFIG.absorberChance
+    form.absorberCool.value = CONFIG.absorberCool
+    form.absorberHeat.value = CONFIG.absorberHeat
+    form.controlRodChance.value = CONFIG.controlRodChance
+    form.controlRodCool.value = CONFIG.controlRodCool
+
+    form.controlRodHeat.value = CONFIG.controlRodHeat
+    form.coolantCool.value = CONFIG.coolantCool
+    form.fuelChance.value = CONFIG.fuelChance
+    form.fuelCool.value = CONFIG.fuelCool
+    form.fuelHeat.value = CONFIG.fuelHeat
+    form.fuelSpontChance.value = CONFIG.fuelSpontChance
+    form.fuelSpontHeat.value = CONFIG.fuelSpontHeat
+    form.heatMax.value = CONFIG.heatMax
+    form.heatTransfer.value = CONFIG.heatTransfer
+    form.moderatorCool.value = CONFIG.moderatorCool
+    form.nSpawnMin.value = CONFIG.nSpawnMin
+    form.nSpawnMax.value = CONFIG.nSpawnMax
+    form.nSpeedMin.value = CONFIG.nSpeedMin
+    form.nSpeedMax.value = CONFIG.nSpeedMax
+    form.reflectorCool.value = CONFIG.reflectorCool
+    form.reflectorHeat.value = CONFIG.reflectorHeat
+    // form.wallCool.value = CONFIG.wallCool
+
+    form.renderGlow.checked = CONFIG.renderGlow
+    form.nCardDir.checked = CONFIG.nCardDir
 }
 
 /*
@@ -283,7 +336,7 @@ const CONFIG = {
     fuelSpontChance: 5,     // chance for spontaneous neutron emission
     fuelSpontHeat: 2,       // heat generated per spontaneous neutron emission
     heatMax: 1000,          // maximum allowed heat
-    heatTransfer: 0.02,     // percent of heat transferred to adjacent tiles
+    heatTransfer: 2,        // percent of heat transferred to adjacent tiles
     moderatorCool: 10,      // moderator cooling per tick
     nCardDir: false,        // neutrons only travel in cardinal directions
     nSpawnMin: 1,           // min number of neutrons per reaction
@@ -307,6 +360,7 @@ function setup() {
     initCanvas();
     initGrid();
     initNeutrons();
+    initVars()
 
     defaultReactor();
 }
