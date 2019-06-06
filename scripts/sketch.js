@@ -108,39 +108,42 @@ function fillEdges() {
 function defaultReactor() {
     fillModerator();
 
-    grid[1][1] = new Wall(1, 1);
-    grid[1][12] = new Wall(1, 12);
-    grid[12][1] = new Wall(12, 1);
-    grid[12][12] = new Wall(12, 12);
+    var xOffset = 7;
+    var yOffset = 3;
+
+    grid[1+xOffset][1+yOffset] = new Wall(1+xOffset, 1+yOffset);
+    grid[1+xOffset][12+yOffset] = new Wall(1+xOffset, 12+yOffset);
+    grid[12+xOffset][1+yOffset] = new Wall(12+xOffset, 1+yOffset);
+    grid[12+xOffset][12+yOffset] = new Wall(12+xOffset, 12+yOffset);
 
     for (var x = 2; x < 12; x++) {
-        grid[x][1] = new VerticalReflector(x, 1);
-        grid[x][12] = new VerticalReflector(x, 12);
+        grid[x+xOffset][1+yOffset] = new VerticalReflector(x+xOffset, 1+yOffset);
+        grid[x+xOffset][12+yOffset] = new VerticalReflector(x+xOffset, 12+yOffset);
     }
 
     for (var y = 2; y < 12; y++) {
-        grid[1][y] = new HorizontalReflector(1, y);
-        grid[12][y] = new HorizontalReflector(12, y);
+        grid[1+xOffset][y+yOffset] = new HorizontalReflector(1+xOffset, y+yOffset);
+        grid[12+xOffset][y+yOffset] = new HorizontalReflector(12+xOffset, y+yOffset);
     }
 
     for (var x = 3; x < 11; x++) {
         for (var y = 3; y < 11; y++) {
-            grid[x][y] = new Fuel(x, y);
+            grid[x+xOffset][y+yOffset] = new Fuel(x+xOffset, y+yOffset);
         }
     }
 
     for (var x = 2; x < 12; x++) {
-        grid[x][2] = new ControlRod(x, 2);
-        grid[x][5] = new ControlRod(x, 5);
-        grid[x][8] = new ControlRod(x, 8);
-        grid[x][11] = new ControlRod(x, 11);
+        grid[x+xOffset][2+yOffset] = new ControlRod(x+xOffset, 2+yOffset);
+        grid[x+xOffset][5+yOffset] = new ControlRod(x+xOffset, 5+yOffset);
+        grid[x+xOffset][8+yOffset] = new ControlRod(x+xOffset, 8+yOffset);
+        grid[x+xOffset][11+yOffset] = new ControlRod(x+xOffset, 11+yOffset);
     }
 
     for (var y = 3; y < 11; y++) {
-        grid[2][y] = new ControlRod(2, y);
-        grid[5][y] = new ControlRod(5, y);
-        grid[8][y] = new ControlRod(8, y);
-        grid[11][y] = new ControlRod(11, y);
+        grid[2+xOffset][y+yOffset] = new ControlRod(2+xOffset, y+yOffset);
+        grid[5+xOffset][y+yOffset] = new ControlRod(5+xOffset, y+yOffset);
+        grid[8+xOffset][y+yOffset] = new ControlRod(8+xOffset, y+yOffset);
+        grid[11+xOffset][y+yOffset] = new ControlRod(11+xOffset, y+yOffset);
     }
 }
 
@@ -162,6 +165,7 @@ function checkMinMax(min, max) {
 // Ensure value falls within the correct bounds
 function constrain(value, min=0, max=1000000) {
     value = int(value);
+
     if (value < min) {
         return min;
     } else if (value > max) {
@@ -215,7 +219,7 @@ function drawMap() {
             grid[c.x][c.y] = new HorizontalReflector(c.x, c.y);
             break;
     }
-    
+
     fillEdges();
 }
 
